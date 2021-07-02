@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include <string>
 
 namespace tools {
@@ -31,7 +32,24 @@ namespace tools {
 
       if (!str.empty())
         lfunc(str);
+    }  
+
+  template <template <typename> typename C>
+    auto split(std::string str, std::string delm) {
+      auto out = C<std::string>();
+
+      for (auto i = str.find_first_of(delm); i != EOF; i = str.find_first_of(delm)) {
+        auto next = str.substr(0, i);
+        str = str.substr(i + delm.size());
+        out.push_back(next);
+      }
+
+      if (!str.empty())
+        out.push_back(str);
+
+      return out;
     }
+
 
   template <template <typename, typename ...> typename C, typename T, typename ...A>
     void remove(C<T, A...> &cont, T find) {
@@ -53,5 +71,12 @@ namespace tools {
 
         iter = --cont.erase(iter);
       }
+    }
+
+  template <template <typename, typename ...> typename C, typename T, typename ...A>
+    std::optional<T> pop(C<T, A...> &cont) {
+      auto out = cont.front();
+      cont.pop_front();
+      return out;
     }
 }
