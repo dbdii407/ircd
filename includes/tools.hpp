@@ -50,7 +50,6 @@ namespace tools {
       return out;
     }
 
-
   template <template <typename, typename ...> typename C, typename T, typename ...A>
     void remove(C<T, A...> &cont, T find) {
       for (auto iter = cont.begin(); iter != cont.end(); ++iter) {
@@ -75,8 +74,12 @@ namespace tools {
 
   template <template <typename, typename ...> typename C, typename T, typename ...A>
     std::optional<T> pop(C<T, A...> &cont) {
+      if (cont.size() == 0)
+        return {};
+
       auto out = cont.front();
       cont.pop_front();
+
       return out;
     }
 }
